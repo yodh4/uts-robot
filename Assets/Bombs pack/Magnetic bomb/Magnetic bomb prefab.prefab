@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: 6400000}
   - component: {fileID: 3122625982810245219}
+  - component: {fileID: 8769434531442124105}
   m_Layer: 0
   m_Name: Magnetic bomb prefab
   m_TagString: Bombs
@@ -119,3 +120,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466d7394067d4214585a76daffad942b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  locationArea: 3
+--- !u!65 &8769434531442124105
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 273.29, y: 55.628807, z: 305.9}
+  m_Center: {x: -0.008476258, y: 28.185604, z: -15.605005}

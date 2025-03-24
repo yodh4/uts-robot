@@ -35,5 +35,6 @@ public class BombGenerator : MonoBehaviour
         }
 
         bombs[randomIndex].SetActive(true);
+        BombCounter.instance.AddBomb();
     }
 }

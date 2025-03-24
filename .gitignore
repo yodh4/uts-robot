@@ -79,3 +79,6 @@ Assets/AssetStore/
 # Plastic SCM Meta
 ignore.conf
 .plastic
+
+Assets/Scripts/RobotController.cs
+Assets/Scripts/RobotController.cs.meta
