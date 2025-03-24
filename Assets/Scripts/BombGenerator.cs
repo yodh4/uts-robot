@@ -20,5 +20,20 @@ public class BombGenerator : MonoBehaviour
                 bombC.Add(bomb);
             }
         }
+    
+        // Randomize the bombs.
+        RandomizeBombs(bombA);
+        RandomizeBombs(bombB);
+        RandomizeBombs(bombC);
+    }
+
+    void RandomizeBombs(List<GameObject> bombs){
+        int randomIndex = Random.Range(0, bombs.Count);
+
+        foreach(GameObject bomb in bombs){
+            bomb.SetActive(false);
+        }
+
+        bombs[randomIndex].SetActive(true);
     }
 }
