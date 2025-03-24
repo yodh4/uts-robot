@@ -82,3 +82,9 @@ ignore.conf
 
 Assets/Scripts/RobotController.cs
 Assets/Scripts/RobotController.cs.meta
+Assets/Scripts/CamDetection.cs
+Assets/Scripts/CamDetection.cs.meta
+Assets/Scripts/CamSensor.cs
+Assets/Scripts/CamSensor.cs.meta
+Assets/Scene Jawaban.unity
+Assets/Scene Jawaban.unity.meta
