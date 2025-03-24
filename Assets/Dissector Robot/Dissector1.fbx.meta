@@ -1,0 +1,188 @@
+fileFormatVersion: 2
+guid: dab84fafbc25c6d498baac87e2e1e7cc
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armor_dissector
+    100002: //RootNode
+    100004: main_body
+    100006: Tire_BL_Disctr
+    100008: tire_BR_Disctr
+    100010: tire_FL_Disctr
+    100012: tire_FR_disctr
+    100014: w_1_disector
+    100016: w_2_disector
+    100018: w_3_disector
+    100020: weapons
+    400000: Armor_dissector
+    400002: //RootNode
+    400004: main_body
+    400006: Tire_BL_Disctr
+    400008: tire_BR_Disctr
+    400010: tire_FL_Disctr
+    400012: tire_FR_disctr
+    400014: w_1_disector
+    400016: w_2_disector
+    400018: w_3_disector
+    400020: weapons
+    2100000: Diesector_material
+    2100002: Default_Material
+    2100004: weapnDiesector
+    2100006: tire_interior
+    2100008: boxweapone
+    2100010: Diesector_Metal_Steel_Textured_White_1
+    2100012: dissector_textr_top
+    2100014: wheelrod
+    2100016: body_color
+    2100018: body_txtr
+    2100020: blinn2
+    2100022: Diesector_Color_I13
+    2100024: lambert2
+    2100026: Diesector_tread
+    2100028: blinn3
+    2100030: 01 - Default
+    2100032: Diesector_discetor_armr
+    2300000: Armor_dissector
+    2300002: main_body
+    2300004: Tire_BL_Disctr
+    2300006: tire_BR_Disctr
+    2300008: tire_FL_Disctr
+    2300010: tire_FR_disctr
+    2300012: w_1_disector
+    2300014: w_2_disector
+    2300016: w_3_disector
+    3300000: Armor_dissector
+    3300002: main_body
+    3300004: Tire_BL_Disctr
+    3300006: tire_BR_Disctr
+    3300008: tire_FL_Disctr
+    3300010: tire_FR_disctr
+    3300012: w_1_disector
+    3300014: w_2_disector
+    3300016: w_3_disector
+    4300000: main_body
+    4300002: tire_BR_Disctr
+    4300004: Tire_BL_Disctr
+    4300006: tire_FL_Disctr
+    4300008: tire_FR_disctr
+    4300010: Armor_dissector
+    4300012: w_3_disector
+    4300014: w_2_disector
+    4300016: w_1_disector
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 11
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
