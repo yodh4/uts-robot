@@ -1406,14 +1406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db67236d558b394d962a37265115e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zones: []
-  gates: []
-  currentZoneIndex: 0
-  searchGridSpacing: 4
-  carController: {fileID: 0}
-  searchPoints: []
-  currentSearchPointIndex: 0
-  searchTarget: {fileID: 0}
 --- !u!4 &116417805
 Transform:
   m_ObjectHideFlags: 0
@@ -2588,7 +2580,7 @@ Transform:
   m_GameObject: {fileID: 193560581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 61.2, y: 2.5580015, z: 16.2}
+  m_LocalPosition: {x: 45.18, y: 2.5580015, z: -42.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6057,7 +6049,7 @@ Transform:
   m_GameObject: {fileID: 466457464}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1170263, y: 0.6957053, z: -0.11645855, w: 0.6990969}
-  m_LocalPosition: {x: 38.660034, y: 3.1460001, z: -37.46313}
+  m_LocalPosition: {x: 39.910034, y: 3.1460001, z: -29.633131}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14689,7 +14681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 41.36
+      value: 42.61
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14697,7 +14689,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -37.45
+      value: -29.62
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14890,7 +14882,6 @@ MonoBehaviour:
   motorForce: 100
   brakeForce: 3000
   maxSteerAngle: 30
-  target: {fileID: 193560582}
   targetReachThreshold: 1.5
   lookAheadDistance: 4
   steeringSmoothness: 5
@@ -14899,7 +14890,9 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1
-  avoidanceStrength: 1.1
+  avoidanceStrength: 0.9
+  areaMin: {x: 60.15, y: 0, z: -51.48}
+  areaMax: {x: 96.66, y: 0, z: -6.06}
 --- !u!1 &1034825936
 GameObject:
   m_ObjectHideFlags: 0
@@ -24293,7 +24286,7 @@ Transform:
   m_GameObject: {fileID: 1708560253}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1170263, y: 0.6957053, z: -0.116458565, w: 0.69909686}
-  m_LocalPosition: {x: 38.660034, y: 3.1460001, z: -37.46313}
+  m_LocalPosition: {x: 39.910034, y: 3.1460001, z: -29.633131}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

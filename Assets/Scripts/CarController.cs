@@ -20,7 +20,7 @@ public class SimpleCarController : MonoBehaviour
     private float currentBrakeForce;
     private bool isBraking;
 
-    public Transform target; // Target yang mau dituju robot
+    private Vector3 targetPosition; // Target position for the car to move towards
     public float targetReachThreshold = 1.5f; // Berapa dekat ke target dianggap sampai
 
     public float lookAheadDistance = 5f;
@@ -36,6 +36,28 @@ public class SimpleCarController : MonoBehaviour
     public LayerMask obstacleLayer;
     public float avoidanceStrength = 1.5f;
 
+    [Header("Roaming Area")]
+    public Vector3 areaMin = new Vector3(60.15f, 0f, -51.48f); // Lower left (p1 or p3, min x/z)
+    public Vector3 areaMax = new Vector3(96.66f, 0f, -6.06f);  // Upper right (p2 or p4, max x/z)
+
+
+    private Vector3 gateA = new Vector3(59.95f, 0f, -47.02f);
+    private Vector3 gateB = new Vector3(59.95f, 0f, -42.42f);
+    private bool hasEnteredArea = false;
+
+    private void Start()
+{
+    // Set first target as gate midpoint
+    targetPosition = (gateA + gateB) / 2f;
+}
+
+    private void SetRandomTarget()
+{
+    float x = Random.Range(areaMin.x, areaMax.x);
+    float z = Random.Range(areaMin.z, areaMax.z);
+    targetPosition = new Vector3(x, transform.position.y, z);
+}
+
     private void FixedUpdate()
     {
         HandleMotor();
@@ -44,36 +66,41 @@ public class SimpleCarController : MonoBehaviour
     }
 
     private void HandleMotor()
-    {
-        if (target == null)
-            return;
+{
+    float distanceToTarget = Vector3.Distance(targetPosition, transform.position);
 
-        float distanceToTarget = Vector3.Distance(target.position, transform.position);
-        
-        // Check if we've reached the target
-        if (distanceToTarget <= targetReachThreshold)
+    if (distanceToTarget <= targetReachThreshold)
+    {
+        if (!hasEnteredArea)
         {
-            // Stop motors and apply brakes
-            frontLeftWheel.motorTorque = 0f;
-            frontRightWheel.motorTorque = 0f;
-            rearLeftWheel.motorTorque = 0f;
-            rearRightWheel.motorTorque = 0f;
-            
-            currentBrakeForce = brakeForce;
+            hasEnteredArea = true;
+            SetRandomTarget();
         }
         else
         {
-            // Moving toward target
-            frontLeftWheel.motorTorque = motorForce;
-            frontRightWheel.motorTorque = motorForce;
-            rearLeftWheel.motorTorque = motorForce;
-            rearRightWheel.motorTorque = motorForce;
-            
-            currentBrakeForce = 0f;
+            SetRandomTarget();
         }
-        
-        ApplyBraking();
+
+        // Stop motors and apply brakes
+        frontLeftWheel.motorTorque = 0f;
+        frontRightWheel.motorTorque = 0f;
+        rearLeftWheel.motorTorque = 0f;
+        rearRightWheel.motorTorque = 0f;
+
+        currentBrakeForce = brakeForce;
     }
+    else
+    {
+        frontLeftWheel.motorTorque = motorForce;
+        frontRightWheel.motorTorque = motorForce;
+        rearLeftWheel.motorTorque = motorForce;
+        rearRightWheel.motorTorque = motorForce;
+
+        currentBrakeForce = 0f;
+    }
+
+    ApplyBraking();
+}
 
     private Vector3 GetAvoidanceDirection()
     {
@@ -112,15 +139,12 @@ public class SimpleCarController : MonoBehaviour
 
     private void HandleSteering()
     {
-        if (target == null)
-            return;
-
         Vector3 avoidanceDir = GetAvoidanceDirection();
-        Vector3 targetDir = (target.position - transform.position).normalized;
+        Vector3 targetDir = (targetPosition - transform.position).normalized;
 
         Vector3 finalDir = (targetDir + avoidanceDir * avoidanceStrength).normalized;
 
-        if (Vector3.Distance(target.position, transform.position) < targetReachThreshold)
+        if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
         {
             currentSteerAngle = 0f;
         }
@@ -137,7 +161,6 @@ public class SimpleCarController : MonoBehaviour
         frontLeftWheel.steerAngle = currentSteerAngle;
         frontRightWheel.steerAngle = currentSteerAngle;
     }
-
     private void UpdateWheels()
     {
         UpdateSingleWheel(frontLeftWheel, frontLeftTransform);
