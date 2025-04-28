@@ -1314,7 +1314,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7665215c8eddc0a44a216110cdeced13, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.464
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7665215c8eddc0a44a216110cdeced13, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2832,7 +2832,7 @@ WheelCollider:
   m_GameObject: {fileID: 254840153}
   serializedVersion: 2
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.08
+  m_Radius: 0.138
   m_SuspensionSpring:
     spring: 90000
     damper: 9000
@@ -5297,7 +5297,7 @@ Transform:
   m_GameObject: {fileID: 422829770}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.189, y: -0.024999952, z: -0.33}
+  m_LocalPosition: {x: 0.189, y: -0.0193, z: -0.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5312,7 +5312,7 @@ WheelCollider:
   m_GameObject: {fileID: 422829770}
   serializedVersion: 2
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.08
+  m_Radius: 0.138
   m_SuspensionSpring:
     spring: 90000
     damper: 9000
@@ -5878,7 +5878,7 @@ Transform:
   m_GameObject: {fileID: 466457464}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1170263, y: 0.6957053, z: -0.11645855, w: 0.6990969}
-  m_LocalPosition: {x: 40.963028, y: 3.013, z: -29.57913}
+  m_LocalPosition: {x: 40.950035, y: 3.1790001, z: -29.24313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14419,9 +14419,41 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 290995903, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 290995903, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 290995903, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 290995903, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 356009327, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 356009328, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 356009328, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 356009328, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 356009328, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 535495609, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_TagString
@@ -14439,6 +14471,22 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1171793884, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171793884, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171793884, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171793884, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1283037223, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_Name
       value: Dissector Robot
@@ -14449,27 +14497,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.3189788
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.3189788
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.3189788
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.663
+      value: 43.65
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.083
+      value: 2.249
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.566
+      value: -29.23
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14499,9 +14547,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1604873718, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604873719, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604873719, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604873719, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 1674765882, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_IsActive
@@ -14531,6 +14595,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1033340548}
+    - targetCorrespondingSourceObject: {fileID: 1283037223, guid: 78f66e17931a4e5449da398ea3d1f94c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1033340552}
     - targetCorrespondingSourceObject: {fileID: 2126553635, guid: 78f66e17931a4e5449da398ea3d1f94c,
         type: 3}
       insertIndex: -1
@@ -14594,7 +14662,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.28028205, y: 0.13997887, z: 0.39745128}
+  m_Size: {x: 0.28028205, y: 0.2, z: 0.39745128}
   m_Center: {x: 0.004390678, y: 0.02730014, z: -0.16476147}
 --- !u!54 &1033340547
 Rigidbody:
@@ -14646,6 +14714,28 @@ MonoBehaviour:
   motorForce: 750
   brakeForce: 2500
   maxSteerAngle: 15
+--- !u!114 &1033340552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033340545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8652f4ba4f412d644b996d98f0b4f602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lidarRays: 36
+  lidarRange: 10
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lidarHeightOffset: 0.2
+  lidarRaysVertical: 3
+  lidarVerticalAngle: 5
+  gridSize: 100
+  cellSize: 0.5
 --- !u!1 &1034825936
 GameObject:
   m_ObjectHideFlags: 0
@@ -14687,7 +14777,7 @@ WheelCollider:
   m_GameObject: {fileID: 1034825936}
   serializedVersion: 2
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.08
+  m_Radius: 0.138
   m_SuspensionSpring:
     spring: 90000
     damper: 9000
@@ -24039,7 +24129,7 @@ Transform:
   m_GameObject: {fileID: 1708560253}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1170263, y: 0.6957053, z: -0.116458565, w: 0.69909686}
-  m_LocalPosition: {x: 40.963028, y: 3.013, z: -29.57913}
+  m_LocalPosition: {x: 40.950035, y: 3.1790001, z: -29.24313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27769,7 +27859,7 @@ WheelCollider:
   m_GameObject: {fileID: 1939369103}
   serializedVersion: 2
   m_Center: {x: 0, y: 0, z: 0}
-  m_Radius: 0.08
+  m_Radius: 0.138
   m_SuspensionSpring:
     spring: 90000
     damper: 9000
