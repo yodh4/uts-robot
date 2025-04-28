@@ -80,8 +80,8 @@ Assets/AssetStore/
 ignore.conf
 .plastic
 
-Assets/Scripts/RobotController.cs
-Assets/Scripts/RobotController.cs.meta
+# Assets/Scripts/RobotController.cs
+# Assets/Scripts/RobotController.cs.meta
 Assets/Scripts/CamDetection.cs
 Assets/Scripts/CamDetection.cs.meta
 Assets/Scripts/CamSensor.cs

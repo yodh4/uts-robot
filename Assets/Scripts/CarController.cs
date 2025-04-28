@@ -20,23 +20,33 @@ public class SimpleCarController : MonoBehaviour
     private float currentBrakeForce;
     private bool isBraking;
 
+    // Autonomous control inputs
+    [HideInInspector] public float autoThrottle = 0f;
+    [HideInInspector] public float autoSteer = 0f;
+    public bool useAutonomousControl = false;
+
     private void FixedUpdate()
     {
-        HandleMotor();
-        HandleSteering();
+        if (useAutonomousControl)
+        {
+            HandleMotor(autoThrottle);
+            HandleSteering(autoSteer);
+        }
+        else
+        {
+            HandleMotor(Input.GetAxis("Vertical"));
+            HandleSteering(Input.GetAxis("Horizontal"));
+        }
         UpdateWheels();
     }
 
-    private void HandleMotor()
+    private void HandleMotor(float verticalInput)
     {
-        float verticalInput = Input.GetAxis("Vertical");
-        isBraking = Input.GetKey(KeyCode.Space);
-
+        isBraking = Input.GetKey(KeyCode.Space) && !useAutonomousControl;
         frontLeftWheel.motorTorque = verticalInput * motorForce;
         frontRightWheel.motorTorque = verticalInput * motorForce;
         rearLeftWheel.motorTorque = verticalInput * motorForce;
         rearRightWheel.motorTorque = verticalInput * motorForce;
-
         currentBrakeForce = isBraking ? brakeForce : 0f;
         ApplyBraking();
     }
@@ -49,9 +59,8 @@ public class SimpleCarController : MonoBehaviour
         rearRightWheel.brakeTorque = currentBrakeForce;
     }
 
-    private void HandleSteering()
+    private void HandleSteering(float horizontalInput)
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
         currentSteerAngle = maxSteerAngle * horizontalInput;
         frontLeftWheel.steerAngle = currentSteerAngle;
         frontRightWheel.steerAngle = currentSteerAngle;
