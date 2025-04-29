@@ -85,18 +85,21 @@ public class RobotController : MonoBehaviour
         while (true)
         {
             if (x >= 0 && x < gridSize && y >= 0 && y < gridSize)
-                occupancyGrid[x, y] = 0; // Free
+            {
+                // Only mark as free if it was unknown
+                if (occupancyGrid[x, y] == -1)
+                    occupancyGrid[x, y] = 0; // Free
+            }
             if (x == x1 && y == y1) break;
             int e2 = 2 * err;
             if (e2 > -dy) { err -= dy; x += sx; }
             if (e2 < dx) { err += dx; y += sy; }
         }
         // Mark obstacle cell if hit
-        // Mark obstacle cell if hit
-    if (hitObstacle && x1 >= 0 && x1 < gridSize && y1 >= 0 && y1 < gridSize) {
-        occupancyGrid[x1, y1] = 1;
-    }
-        
+        if (hitObstacle && x1 >= 0 && x1 < gridSize && y1 >= 0 && y1 < gridSize)
+        {
+            occupancyGrid[x1, y1] = 1;
+        }
     }
 
     // Convert world position to grid indices
@@ -116,19 +119,19 @@ public class RobotController : MonoBehaviour
             {
                 Vector3 cellCenter = new Vector3(gridOrigin.x + (x + 0.5f) * cellSize, 0.05f, gridOrigin.y + (y + 0.5f) * cellSize);
                 if (occupancyGrid[x, y] == -1)
-                    Gizmos.color = Color.black * 0.5f; // Unknown
+                    Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 1f); // Unknown
                 else if (occupancyGrid[x, y] == 0)
-                    Gizmos.color = Color.white;
+                    Gizmos.color = Color.green;
                 else if (occupancyGrid[x, y] == 1)
                     Gizmos.color = Color.red;
-                Gizmos.DrawCube(cellCenter, new Vector3(cellSize, 0.01f, cellSize));
+                // Gizmos.DrawCube(cellCenter, new Vector3(cellSize, 0.01f, cellSize));
             }
         }
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(
-            new Vector3(gridOrigin.x + gridSize * cellSize / 2f, 0.1f, gridOrigin.y + gridSize * cellSize / 2f),
-            new Vector3(gridSize * cellSize, 0.1f, gridSize * cellSize)
-        );
+        // Gizmos.color = Color.yellow;
+        // Gizmos.DrawWireCube(
+        //     new Vector3(gridOrigin.x + gridSize * cellSize / 2f, 0.1f, gridOrigin.y + gridSize * cellSize / 2f),
+        //     new Vector3(gridSize * cellSize, 0.1f, gridSize * cellSize)
+        // );
     }
 
     // Update odometry based on movement
@@ -143,4 +146,7 @@ public class RobotController : MonoBehaviour
     // Get odometry data
     public float GetTotalDistanceTravelled() => totalDistanceTravelled;
     public float GetHeading() => heading;
+
+    public int[,] GetOccupancyGrid() => occupancyGrid;
+    public Vector2 GetGridOrigin() => gridOrigin;
 }
