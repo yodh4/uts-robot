@@ -20,9 +20,10 @@ public class SimpleCarController : MonoBehaviour
     private float currentBrakeForce;
 
     private Vector3 targetPosition; // Target position for the car to move towards
-    public float targetReachThreshold = 1f; // Berapa dekat ke target dianggap sampai
+    public float targetReachThreshold = 0;
 
     public float lookAheadDistance = 5f;
+    private bool chasingBomb = false;
 
     [Header("Steering Settings")]
     public float steeringSmoothness = 5.0f; // Higher = smoother but slower response
@@ -49,6 +50,8 @@ public class SimpleCarController : MonoBehaviour
     public int bombDetectionRays = 720;     // number of rays for bomb detection
 
     private bool bombDetected = false;
+    private Vector3 bombPosition;
+    private bool stopAfterBomb = false;
 
     private void Start()
     {
@@ -133,11 +136,28 @@ public class SimpleCarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        BombDetectionScan(); // Scan for bombs with longer range
+        if (stopAfterBomb)
+        {
+            // Stop all movement
+            frontLeftWheel.motorTorque = 0f;
+            frontRightWheel.motorTorque = 0f;
+            rearLeftWheel.motorTorque = 0f;
+            rearRightWheel.motorTorque = 0f;
+            ApplyBraking();
+            UpdateWheels();
+            return;
+        }
+
+        BombDetectionScan();
 
         if (bombDetected)
         {
-            // Go straight to the bomb, skip exploration logic
+            targetPosition = bombPosition;
+            if (Vector3.Distance(transform.position, bombPosition) < targetReachThreshold)
+            {
+                stopAfterBomb = true;
+                chasingBomb = false;
+            }
             HandleMotor();
             HandleSteering();
             UpdateWheels();
@@ -236,43 +256,46 @@ public class SimpleCarController : MonoBehaviour
 }
 
     private Vector3 GetAvoidanceDirection()
+{
+    Vector3 avoidance = Vector3.zero;
+    float angleStep = 360f / lidarRays;
+
+    for (int i = 0; i < lidarRays; i++)
     {
-        Vector3 avoidance = Vector3.zero;
-        float angleStep = 360f / lidarRays;
+        float angle = i * angleStep;
+        Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
+        Ray ray = new Ray(transform.position + Vector3.up * 0.5f, dir);
 
-        for (int i = 0; i < lidarRays; i++)
+        if (Physics.Raycast(ray, out RaycastHit hit, lidarRange))
         {
-            float angle = i * angleStep;
-            Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
-            Ray ray = new Ray(transform.position + Vector3.up * 0.5f, dir);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, lidarRange))
+            // If targeting a bomb, ignore avoidance for bombs
+            if (bombDetected)
             {
-                if (((1 << hit.collider.gameObject.layer) & obstacleLayer) != 0)
+                if (((1 << hit.collider.gameObject.layer) & obstacleLayer) != 0 && !hit.collider.CompareTag("Bombs"))
                 {
-                    // Draw red ray to obstacle
-                    // Debug.DrawRay(ray.origin, dir * hit.distance, Color.red);
                     avoidance -= dir / (hit.distance + 0.1f);
-                }
-                else
-                {
-                    // Draw cyan ray to non-obstacle hit
-                    // Debug.DrawRay(ray.origin, dir * hit.distance, Color.cyan);
                 }
             }
             else
             {
-                // Draw cyan ray to max range (no hit)
-                Debug.DrawRay(ray.origin, dir * lidarRange, Color.cyan);
+                if (((1 << hit.collider.gameObject.layer) & obstacleLayer) != 0)
+                {
+                    avoidance -= dir / (hit.distance + 0.1f);
+                }
             }
         }
-
-        return avoidance.normalized;
+        else
+        {
+            Debug.DrawRay(ray.origin, dir * lidarRange, Color.cyan);
+        }
     }
+
+    return avoidance.normalized;
+}
 
     private void BombDetectionScan()
     {
-        bombDetected = false; // Reset at the start of each scan
+        bool foundBomb = false;
         float angleStep = 360f / bombDetectionRays;
         Vector3 origin = transform.position + Vector3.up * 0.0001f;
 
@@ -282,18 +305,22 @@ public class SimpleCarController : MonoBehaviour
             Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
             Ray ray = new Ray(origin, dir);
 
-            Debug.DrawRay(origin, dir * bombDetectionRange, Color.yellow);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, bombDetectionRange))
+            if (Physics.Raycast(ray, out RaycastHit hit, bombDetectionRange, ~0))
             {
                 if (hit.collider.CompareTag("Bombs") && hit.collider.gameObject.activeInHierarchy)
                 {
-                    Debug.Log("BOMB DETECTED!!! " + hasEnteredArea);
-                    targetPosition = hit.collider.transform.position;
                     bombDetected = true;
-                    break; // Only chase the first bomb seen
+                    bombPosition = hit.collider.transform.position;
+                    chasingBomb = true;
+                    Debug.Log("Bomb detected at: " + bombPosition);
+                    foundBomb = true;
+                    break;
                 }
             }
+        }
+        if (!foundBomb)
+        {
+            bombDetected = false;
         }
     }
 

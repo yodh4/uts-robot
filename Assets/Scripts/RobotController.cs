@@ -58,12 +58,12 @@ public class RobotController : MonoBehaviour
                 Ray ray = new Ray(lidarOrigin, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, lidarRange, obstacleMask))
                 {
-                    Debug.DrawLine(lidarOrigin, hit.point, Color.red);
+                    // Debug.DrawLine(lidarOrigin, hit.point, Color.red);
                     UpdateGridWithRay(lidarOrigin, hit.point, true);
                 }
                 else
                 {
-                    Debug.DrawRay(lidarOrigin, dir * lidarRange, Color.green);
+                    // Debug.DrawRay(lidarOrigin, dir * lidarRange, Color.green);
                     UpdateGridWithRay(lidarOrigin, lidarOrigin + dir * lidarRange, false);
                 }
             }
@@ -85,18 +85,21 @@ public class RobotController : MonoBehaviour
         while (true)
         {
             if (x >= 0 && x < gridSize && y >= 0 && y < gridSize)
-                occupancyGrid[x, y] = 0; // Free
+            {
+                // Only mark as free if it was unknown
+                if (occupancyGrid[x, y] == -1)
+                    occupancyGrid[x, y] = 0; // Free
+            }
             if (x == x1 && y == y1) break;
             int e2 = 2 * err;
             if (e2 > -dy) { err -= dy; x += sx; }
             if (e2 < dx) { err += dx; y += sy; }
         }
         // Mark obstacle cell if hit
-        // Mark obstacle cell if hit
-    if (hitObstacle && x1 >= 0 && x1 < gridSize && y1 >= 0 && y1 < gridSize) {
-        occupancyGrid[x1, y1] = 1;
-    }
-        
+        if (hitObstacle && x1 >= 0 && x1 < gridSize && y1 >= 0 && y1 < gridSize)
+        {
+            occupancyGrid[x1, y1] = 1;
+        }
     }
 
     // Convert world position to grid indices
@@ -121,14 +124,14 @@ public class RobotController : MonoBehaviour
                     Gizmos.color = Color.green;
                 else if (occupancyGrid[x, y] == 1)
                     Gizmos.color = Color.red;
-                Gizmos.DrawCube(cellCenter, new Vector3(cellSize, 0.01f, cellSize));
+                // Gizmos.DrawCube(cellCenter, new Vector3(cellSize, 0.01f, cellSize));
             }
         }
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(
-            new Vector3(gridOrigin.x + gridSize * cellSize / 2f, 0.1f, gridOrigin.y + gridSize * cellSize / 2f),
-            new Vector3(gridSize * cellSize, 0.1f, gridSize * cellSize)
-        );
+        // Gizmos.color = Color.yellow;
+        // Gizmos.DrawWireCube(
+        //     new Vector3(gridOrigin.x + gridSize * cellSize / 2f, 0.1f, gridOrigin.y + gridSize * cellSize / 2f),
+        //     new Vector3(gridSize * cellSize, 0.1f, gridSize * cellSize)
+        // );
     }
 
     // Update odometry based on movement
