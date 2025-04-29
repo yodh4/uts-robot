@@ -21,7 +21,7 @@ public class SimpleCarController : MonoBehaviour
     private bool isBraking;
 
     private Vector3 targetPosition; // Target position for the car to move towards
-    public float targetReachThreshold = 4f; // Berapa dekat ke target dianggap sampai
+    public float targetReachThreshold = 1f; // Berapa dekat ke target dianggap sampai
 
     public float lookAheadDistance = 5f;
 
@@ -36,7 +36,7 @@ public class SimpleCarController : MonoBehaviour
     public LayerMask obstacleLayer;
     public float avoidanceStrength = 1.5f;
 
-    [Header("Roaming Area")]
+    [Header("Zone A")]
     public Vector3 areaMin = new Vector3(60.15f, 0f, -51.48f); // Lower left (p1 or p3, min x/z)
     public Vector3 areaMax = new Vector3(96.66f, 0f, -6.06f);  // Upper right (p2 or p4, max x/z)
 
@@ -46,12 +46,15 @@ public class SimpleCarController : MonoBehaviour
     private bool hasEnteredArea = false;
     private Vector3 lastPosition;
 
+    public float bombDetectionRange = 50f; // or any value longer than lidarRange
+    public int bombDetectionRays = 720;     // number of rays for bomb detection
+
     private void Start()
-{
-    // Set first target as gate midpoint
-    targetPosition = (gateA + gateB) / 2f;
-    lastPosition = transform.position;
-}
+    {
+        // Set first target as gate midpoint
+        targetPosition = (gateA + gateB) / 2f;
+        lastPosition = transform.position;
+    }
 
     private void SetRandomTarget()
     {
@@ -76,25 +79,31 @@ public class SimpleCarController : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
-        HandleMotor();
-        HandleSteering();
-        UpdateWheels();
+{
+    BombDetectionScan(); // Scan for bombs with longer range
 
-        if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
+    HandleMotor();
+    HandleSteering();
+    UpdateWheels();
+
+    if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
+    {
+        hasEnteredArea = true;
+        Debug.Log("Entered area: " + hasEnteredArea);
+        SetRandomTarget();
+    }
+
+    if (hasEnteredArea)
+    {
+        if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
         {
-            hasEnteredArea = true;
-            Debug.Log("Entered area: " + hasEnteredArea);
             SetRandomTarget();
         }
+        // If a bomb is detected, targetPosition will be set by BombDetectionScan()
+    }
 
-        HandleMotor();
-        HandleSteering();
-        UpdateWheels();
-
-        lastPosition = transform.position;
-
-        }
+    lastPosition = transform.position;
+}
 
     private bool CrossedGate(Vector3 from, Vector3 to)
     {
@@ -155,20 +164,54 @@ public class SimpleCarController : MonoBehaviour
             Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
             Ray ray = new Ray(transform.position + Vector3.up * 0.5f, dir);
 
-            // Draw the ray in the Scene view (green if no hit, red if hit)
-            if (Physics.Raycast(ray, out RaycastHit hit, lidarRange, obstacleLayer))
+            if (Physics.Raycast(ray, out RaycastHit hit, lidarRange))
             {
-                avoidance -= dir / (hit.distance + 0.1f);
-                Debug.DrawRay(ray.origin, dir * hit.distance, Color.red); // Red for hit
+                if (((1 << hit.collider.gameObject.layer) & obstacleLayer) != 0)
+                {
+                    // Draw red ray to obstacle
+                    Debug.DrawRay(ray.origin, dir * hit.distance, Color.red);
+                    avoidance -= dir / (hit.distance + 0.1f);
+                }
+                else
+                {
+                    // Draw cyan ray to non-obstacle hit
+                    Debug.DrawRay(ray.origin, dir * hit.distance, Color.cyan);
+                }
             }
             else
             {
-                Debug.DrawRay(ray.origin, dir * lidarRange, Color.green); // Green for no hit
+                // Draw cyan ray to max range (no hit)
+                Debug.DrawRay(ray.origin, dir * lidarRange, Color.cyan);
             }
         }
 
         return avoidance.normalized;
     }
+
+    private void BombDetectionScan()
+{
+    float angleStep = 360f / bombDetectionRays;
+    Vector3 origin = transform.position + Vector3.up * 0.0001f;
+
+    for (int i = 0; i < bombDetectionRays; i++)
+    {
+        float angle = i * angleStep;
+        Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
+        Ray ray = new Ray(origin, dir);
+
+        Debug.DrawRay(origin, dir * bombDetectionRange, Color.yellow);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, bombDetectionRange))
+        {
+            if (hit.collider.CompareTag("Bombs") && hit.collider.gameObject.activeInHierarchy)
+            {
+                Debug.Log("BOMB DETECTED!!! " + hasEnteredArea);
+                targetPosition = hit.collider.transform.position;
+                break; // Only chase the first bomb seen
+            }
+        }
+    }
+}
 
 
     private void ApplyBraking()

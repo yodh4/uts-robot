@@ -31,12 +31,12 @@ public class RobotController : MonoBehaviour
         for (int x = 0; x < gridSize; x++)
             for (int y = 0; y < gridSize; y++)
                 occupancyGrid[x, y] = -1; // Unknown
-        gridOrigin = new Vector2(transform.position.x - gridSize * cellSize / 2f, transform.position.z - gridSize * cellSize / 2f);
         lastPosition = transform.position;
     }
 
     void Update()
     {
+        gridOrigin = new Vector2(transform.position.x - gridSize * cellSize / 2f, transform.position.z - gridSize * cellSize / 2f);
         UpdateOdometry();
         SimulateLidar();
     }
@@ -91,8 +91,11 @@ public class RobotController : MonoBehaviour
             if (e2 < dx) { err += dx; y += sy; }
         }
         // Mark obstacle cell if hit
-        if (hitObstacle && x1 >= 0 && x1 < gridSize && y1 >= 0 && y1 < gridSize)
-            occupancyGrid[x1, y1] = 1;
+        // Mark obstacle cell if hit
+    if (hitObstacle && x1 >= 0 && x1 < gridSize && y1 >= 0 && y1 < gridSize) {
+        occupancyGrid[x1, y1] = 1;
+    }
+        
     }
 
     // Convert world position to grid indices
@@ -120,6 +123,11 @@ public class RobotController : MonoBehaviour
                 Gizmos.DrawCube(cellCenter, new Vector3(cellSize, 0.01f, cellSize));
             }
         }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(
+            new Vector3(gridOrigin.x + gridSize * cellSize / 2f, 0.1f, gridOrigin.y + gridSize * cellSize / 2f),
+            new Vector3(gridSize * cellSize, 0.1f, gridSize * cellSize)
+        );
     }
 
     // Update odometry based on movement

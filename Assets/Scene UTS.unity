@@ -2580,7 +2580,7 @@ Transform:
   m_GameObject: {fileID: 193560581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.18, y: 2.5580015, z: -42.45}
+  m_LocalPosition: {x: 34.4, y: 2.5580015, z: -32.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14883,13 +14883,13 @@ MonoBehaviour:
   frontRightTransform: {fileID: 750033740}
   rearLeftTransform: {fileID: 750033739}
   rearRightTransform: {fileID: 750033738}
-  motorForce: 100
-  brakeForce: 3000
+  motorForce: 50
+  brakeForce: 2000
   maxSteerAngle: 30
   targetReachThreshold: 1.5
   lookAheadDistance: 4
   steeringSmoothness: 5
-  lidarRange: 3
+  lidarRange: 5
   lidarRays: 180
   obstacleLayer:
     serializedVersion: 2
@@ -14897,6 +14897,8 @@ MonoBehaviour:
   avoidanceStrength: 0.8
   areaMin: {x: 60.15, y: 0, z: -51.48}
   areaMax: {x: 96.66, y: 0, z: -6.06}
+  bombDetectionRange: 20
+  bombDetectionRays: 36
 --- !u!114 &1033340550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14913,7 +14915,7 @@ MonoBehaviour:
   lidarRange: 10
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   lidarHeightOffset: 0.2
   lidarRaysVertical: 1
   lidarVerticalAngle: 5
