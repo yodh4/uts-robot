@@ -10,6 +10,9 @@ public class Bomb : MonoBehaviour
         if(other.CompareTag("Player")){
             BombCounter.instance.DefuseBomb();
             gameObject.SetActive(false);
+            SimpleCarController car = FindObjectOfType<SimpleCarController>();
+            if (car != null)
+                car.SwitchToNextZone();
         }
     }
 }

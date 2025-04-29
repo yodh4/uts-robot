@@ -37,12 +37,20 @@ public class SimpleCarController : MonoBehaviour
     public float avoidanceStrength = 1.5f;
 
     [Header("Zone A")]
-    public Vector3 areaMin = new Vector3(60.15f, 0f, -51.48f); // Lower left (p1 or p3, min x/z)
-    public Vector3 areaMax = new Vector3(96.66f, 0f, -6.06f);  // Upper right (p2 or p4, max x/z)
+    public Vector3 areaMinA = new Vector3(4.18f, 0f, -51.71f);
+    public Vector3 areaMaxA = new Vector3(59.39f, 0f, -35.44f);
+    public Vector3 gateA1 = new Vector3(47.81f, 0f, -34.1f);
+    public Vector3 gateA2 = new Vector3(61.75f, 0f, -34.1f);
+
+    [Header("Zone B")]
+    public Vector3 areaMinB = new Vector3(60.15f, 0f, -51.48f);
+    public Vector3 areaMaxB = new Vector3(96.66f, 0f, -6.06f);
+    public Vector3 gateB1 = new Vector3(59.95f, 0f, -47.02f);
+    public Vector3 gateB2 = new Vector3(59.95f, 0f, -42.42f);
 
 
-    private Vector3 gateA = new Vector3(59.95f, 0f, -47.02f);
-    private Vector3 gateB = new Vector3(59.95f, 0f, -42.42f);
+    private enum Zone { ZoneA, ZoneB }
+    private Zone currentZone = Zone.ZoneA;
     private bool hasEnteredArea = false;
     private Vector3 lastPosition;
 
@@ -52,67 +60,96 @@ public class SimpleCarController : MonoBehaviour
     private void Start()
     {
         // Set first target as gate midpoint
-        targetPosition = (gateA + gateB) / 2f;
+        targetPosition = (gateA1 + gateA2) / 2f;
         lastPosition = transform.position;
+    }
+
+    public void SwitchToNextZone()
+    {
+        if (currentZone == Zone.ZoneA)
+        {
+            currentZone = Zone.ZoneB;
+            // Set target to gate of Zone B
+            targetPosition = (gateB1 + gateB2) / 2f;
+        }
     }
 
     private void SetRandomTarget()
     {
+        Vector3 min, max;
+        if (currentZone == Zone.ZoneA)
+        {
+            min = areaMinA;
+            max = areaMaxA;
+        }
+        else
+        {
+            min = areaMinB;
+            max = areaMaxB;
+        }
+
         int maxAttempts = 30;
-        float checkRadius = 1.5f; // Adjust to your robot's size
+        float checkRadius = 1.5f;
 
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
-            float x = Random.Range(areaMin.x, areaMax.x);
-            float z = Random.Range(areaMin.z, areaMax.z);
+            float x = Random.Range(min.x, max.x);
+            float z = Random.Range(min.z, max.z);
             Vector3 candidate = new Vector3(x, transform.position.y, z);
 
-            // Only accept if not inside an obstacle
             if (!Physics.CheckSphere(candidate, checkRadius, obstacleLayer))
             {
                 targetPosition = candidate;
                 return;
             }
         }
-        // If all attempts fail, just pick the last candidate (may be inside obstacle)
-        targetPosition = new Vector3(Random.Range(areaMin.x, areaMax.x), transform.position.y, Random.Range(areaMin.z, areaMax.z));
+        targetPosition = new Vector3(Random.Range(min.x, max.x), transform.position.y, Random.Range(min.z, max.z));
     }
-
     private void FixedUpdate()
-{
-    BombDetectionScan(); // Scan for bombs with longer range
-
-    HandleMotor();
-    HandleSteering();
-    UpdateWheels();
-
-    if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
     {
-        hasEnteredArea = true;
-        Debug.Log("Entered area: " + hasEnteredArea);
-        SetRandomTarget();
-    }
+        BombDetectionScan(); // Scan for bombs with longer range
 
-    if (hasEnteredArea)
-    {
-        if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
+        HandleMotor();
+        HandleSteering();
+        UpdateWheels();
+
+        if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
         {
+            hasEnteredArea = true;
+            Debug.Log("Entered area: " + hasEnteredArea);
             SetRandomTarget();
         }
-        // If a bomb is detected, targetPosition will be set by BombDetectionScan()
-    }
 
-    lastPosition = transform.position;
-}
+        if (hasEnteredArea)
+        {
+            if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
+            {
+                SetRandomTarget();
+            }
+        }
+
+        lastPosition = transform.position;
+    }
 
     private bool CrossedGate(Vector3 from, Vector3 to)
     {
+        Vector3 gateA, gateB;
+        if (currentZone == Zone.ZoneA)
+        {
+            gateA = gateA1;
+            gateB = gateA2;
+        }
+        else
+        {
+            gateA = gateB1;
+            gateB = gateB2;
+        }
         Vector3 gateDir = gateB - gateA;
         Vector3 toA = from - gateA;
         Vector3 toB = to - gateA;
         float sideFrom = Vector3.Cross(gateDir, toA).y;
         float sideTo = Vector3.Cross(gateDir, toB).y;
-        return sideFrom * sideTo < 0f; // Crossed if sign changed
+        return sideFrom * sideTo < 0f;
     }
 
     private void HandleMotor()

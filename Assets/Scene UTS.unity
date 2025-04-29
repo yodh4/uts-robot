@@ -1006,6 +1006,7 @@ GameObject:
   - component: {fileID: 75961680}
   - component: {fileID: 75961682}
   - component: {fileID: 75961681}
+  - component: {fileID: 75961683}
   m_Layer: 0
   m_Name: Road_set_v1_road_up_2m_HD_f (1)
   m_TagString: Untagged
@@ -1077,6 +1078,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75961679}
+  m_Mesh: {fileID: 4300102, guid: c7f7a9ec09a97d144963b6dd16448dc3, type: 3}
+--- !u!64 &75961683
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75961679}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 4300102, guid: c7f7a9ec09a97d144963b6dd16448dc3, type: 3}
 --- !u!1001 &76468430
 PrefabInstance:
@@ -1314,7 +1337,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7665215c8eddc0a44a216110cdeced13, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.53
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7665215c8eddc0a44a216110cdeced13, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2580,7 +2603,7 @@ Transform:
   m_GameObject: {fileID: 193560581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.4, y: 2.5580015, z: -32.2}
+  m_LocalPosition: {x: 47.83, y: 0, z: -34.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14884,19 +14907,25 @@ MonoBehaviour:
   rearLeftTransform: {fileID: 750033739}
   rearRightTransform: {fileID: 750033738}
   motorForce: 50
-  brakeForce: 2000
+  brakeForce: 1000
   maxSteerAngle: 30
   targetReachThreshold: 1.5
   lookAheadDistance: 4
   steeringSmoothness: 5
-  lidarRange: 5
-  lidarRays: 180
+  lidarRange: 4
+  lidarRays: 90
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1
-  avoidanceStrength: 0.8
-  areaMin: {x: 60.15, y: 0, z: -51.48}
-  areaMax: {x: 96.66, y: 0, z: -6.06}
+  avoidanceStrength: 0.6
+  areaMinA: {x: 4.18, y: 0, z: -51.71}
+  areaMaxA: {x: 59.39, y: 0, z: -35.44}
+  gateA1: {x: 47.82, y: 0, z: -35.48}
+  gateA2: {x: 59.82, y: 0, z: -35.48}
+  areaMinB: {x: 60.15, y: 0, z: -51.48}
+  areaMaxB: {x: 96.66, y: 0, z: -6.06}
+  gateB1: {x: 59.95, y: 0, z: -47.02}
+  gateB2: {x: 59.95, y: 0, z: -42.42}
   bombDetectionRange: 20
   bombDetectionRays: 36
 --- !u!114 &1033340550
