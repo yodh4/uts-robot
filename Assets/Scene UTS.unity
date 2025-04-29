@@ -1664,7 +1664,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013978381734, guid: fe9a19d4f0d796c40bf4fc6b69dd7b81, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.24739
+      value: 54.18
       objectReference: {fileID: 0}
     - target: {fileID: 4000013978381734, guid: fe9a19d4f0d796c40bf4fc6b69dd7b81, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1672,7 +1672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013978381734, guid: fe9a19d4f0d796c40bf4fc6b69dd7b81, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.779867
+      value: -19.54
       objectReference: {fileID: 0}
     - target: {fileID: 4000013978381734, guid: fe9a19d4f0d796c40bf4fc6b69dd7b81, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14813,7 +14813,7 @@ MonoBehaviour:
   rearRightTransform: {fileID: 750033738}
   motorForce: 40
   brakeForce: 2000
-  maxSteerAngle: 50
+  maxSteerAngle: 40
   targetReachThreshold: 1.5
   lookAheadDistance: 4
   steeringSmoothness: 5
@@ -14822,7 +14822,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 4294967295
-  avoidanceStrength: 0.4
+  avoidanceStrength: 0.8
   areaMin: {x: 60.15, y: 0, z: -51.48}
   areaMax: {x: 96.66, y: 0, z: -6.06}
   bombDetectionRange: 20
@@ -14839,8 +14839,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab84cda510fca994696f110e0f6de45d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lidarRays: 720
-  lidarRange: 12
+  lidarRays: 360
+  lidarRange: 15
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4294967295

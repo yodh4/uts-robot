@@ -48,6 +48,8 @@ public class SimpleCarController : MonoBehaviour
     public float bombDetectionRange = 30f; // or any value longer than lidarRange
     public int bombDetectionRays = 720;     // number of rays for bomb detection
 
+    private bool bombDetected = false;
+
     private void Start()
     {
         // Set first target as gate midpoint
@@ -89,7 +91,9 @@ public class SimpleCarController : MonoBehaviour
                             Vector3 to = cellCenter + Vector3.up * 0.5f;
                             Vector3 dir = (to - from).normalized;
                             float dist = Vector3.Distance(from, to);
-                            if (!Physics.Raycast(from, dir, dist, obstacleLayer))
+                            float checkTargetPoint = cellSize * 0.4f;
+                            if (!Physics.Raycast(from, dir, dist, obstacleLayer) &&
+                                !Physics.CheckSphere(cellCenter, checkTargetPoint, obstacleLayer))
                             {
                                 float distToRobot = Vector3.Distance(transform.position, cellCenter);
                                 if (distToRobot < minDist)
@@ -128,92 +132,60 @@ public class SimpleCarController : MonoBehaviour
     }
 
     private void FixedUpdate()
-{
-    BombDetectionScan(); // Scan for bombs with longer range
-
-    if (!hasEnteredArea)
     {
-        // Only check for gate crossing
-        if (CrossedGate(lastPosition, transform.position))
+        BombDetectionScan(); // Scan for bombs with longer range
+
+        if (bombDetected)
         {
-            hasEnteredArea = true;
-            Debug.Log("Entered area: " + hasEnteredArea);
-            SetRandomTarget(); // Start grid-based exploration
+            // Go straight to the bomb, skip exploration logic
+            HandleMotor();
+            HandleSteering();
+            UpdateWheels();
+            lastPosition = transform.position;
+            return;
         }
-    }
 
-    else
-    {
-        // Grid-based exploration logic
-        RobotController robotController = GetComponent<RobotController>();
-        if (robotController != null)
+        if (!hasEnteredArea)
         {
-            int[,] grid = robotController.GetOccupancyGrid();
-            Vector2 gridOrigin = robotController.GetGridOrigin();
-            float cellSize = robotController.cellSize;
-
-            int tx = Mathf.FloorToInt((targetPosition.x - gridOrigin.x) / cellSize);
-            int ty = Mathf.FloorToInt((targetPosition.z - gridOrigin.y) / cellSize);
-
-            if (tx >= 0 && tx < robotController.gridSize && ty >= 0 && ty < robotController.gridSize)
+            if (CrossedGate(lastPosition, transform.position))
             {
-                if (grid[tx, ty] != -1)
+                hasEnteredArea = true;
+                Debug.Log("Entered area: " + hasEnteredArea);
+                SetRandomTarget();
+            }
+        }
+        else
+        {
+            RobotController robotController = GetComponent<RobotController>();
+            if (robotController != null)
+            {
+                int[,] grid = robotController.GetOccupancyGrid();
+                Vector2 gridOrigin = robotController.GetGridOrigin();
+                float cellSize = robotController.cellSize;
+
+                int tx = Mathf.FloorToInt((targetPosition.x - gridOrigin.x) / cellSize);
+                int ty = Mathf.FloorToInt((targetPosition.z - gridOrigin.y) / cellSize);
+
+                if (tx >= 0 && tx < robotController.gridSize && ty >= 0 && ty < robotController.gridSize)
                 {
-                    SetRandomTarget();
+                    if (grid[tx, ty] != -1)
+                    {
+                        SetRandomTarget();
+                    }
                 }
+            }
+
+            if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
+            {
+                SetRandomTarget();
             }
         }
 
-        if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
-        {
-            SetRandomTarget();
-        }
-        // If a bomb is detected, targetPosition will be set by BombDetectionScan()
+        HandleMotor();
+        HandleSteering();
+        UpdateWheels();
+        lastPosition = transform.position;
     }
-
-    // RobotController robotController = GetComponent<RobotController>();
-    // if (robotController != null)
-    // {
-    //     int[,] grid = robotController.GetOccupancyGrid();
-    //     Vector2 gridOrigin = robotController.GetGridOrigin();
-    //     float cellSize = robotController.cellSize;
-
-    //     // Convert targetPosition to grid indices
-    //     int tx = Mathf.FloorToInt((targetPosition.x - gridOrigin.x) / cellSize);
-    //     int ty = Mathf.FloorToInt((targetPosition.z - gridOrigin.y) / cellSize);
-
-    //     // If the target cell is not unexplored, pick a new one
-    //     if (tx >= 0 && tx < robotController.gridSize && ty >= 0 && ty < robotController.gridSize)
-    //     {
-    //         if (grid[tx, ty] != -1)
-    //         {
-    //             SetRandomTarget();
-    //         }
-    //     }
-    // }
-
-    HandleMotor();
-    HandleSteering();
-    UpdateWheels();
-
-    // if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
-    // {
-    //     hasEnteredArea = true;
-    //     Debug.Log("Entered area: " + hasEnteredArea);
-    //     SetRandomTarget();
-    // }
-
-    // if (hasEnteredArea)
-    // {
-    //     if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
-    //     {
-    //         SetRandomTarget();
-    //     }
-    //     // If a bomb is detected, targetPosition will be set by BombDetectionScan()
-    // }
-
-    lastPosition = transform.position;
-}
 
     private bool CrossedGate(Vector3 from, Vector3 to)
     {
@@ -299,29 +271,32 @@ public class SimpleCarController : MonoBehaviour
     }
 
     private void BombDetectionScan()
-{
-    float angleStep = 360f / bombDetectionRays;
-    Vector3 origin = transform.position + Vector3.up * 0.0001f;
-
-    for (int i = 0; i < bombDetectionRays; i++)
     {
-        float angle = i * angleStep;
-        Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
-        Ray ray = new Ray(origin, dir);
+        bombDetected = false; // Reset at the start of each scan
+        float angleStep = 360f / bombDetectionRays;
+        Vector3 origin = transform.position + Vector3.up * 0.0001f;
 
-        Debug.DrawRay(origin, dir * bombDetectionRange, Color.yellow);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, bombDetectionRange))
+        for (int i = 0; i < bombDetectionRays; i++)
         {
-            if (hit.collider.CompareTag("Bombs") && hit.collider.gameObject.activeInHierarchy)
+            float angle = i * angleStep;
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
+            Ray ray = new Ray(origin, dir);
+
+            Debug.DrawRay(origin, dir * bombDetectionRange, Color.yellow);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, bombDetectionRange))
             {
-                Debug.Log("BOMB DETECTED!!! " + hasEnteredArea);
-                targetPosition = hit.collider.transform.position;
-                break; // Only chase the first bomb seen
+                if (hit.collider.CompareTag("Bombs") && hit.collider.gameObject.activeInHierarchy)
+                {
+                    Debug.Log("BOMB DETECTED!!! " + hasEnteredArea);
+                    targetPosition = hit.collider.transform.position;
+                    bombDetected = true;
+                    break; // Only chase the first bomb seen
+                }
             }
         }
     }
-}
+
     private void OnDrawGizmos()
     {
         // Draw the current target position as a red sphere
