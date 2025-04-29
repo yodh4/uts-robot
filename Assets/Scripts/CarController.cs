@@ -21,7 +21,7 @@ public class SimpleCarController : MonoBehaviour
     private bool isBraking;
 
     private Vector3 targetPosition; // Target position for the car to move towards
-    public float targetReachThreshold = 1.5f; // Berapa dekat ke target dianggap sampai
+    public float targetReachThreshold = 4f; // Berapa dekat ke target dianggap sampai
 
     public float lookAheadDistance = 5f;
 
@@ -44,25 +44,66 @@ public class SimpleCarController : MonoBehaviour
     private Vector3 gateA = new Vector3(59.95f, 0f, -47.02f);
     private Vector3 gateB = new Vector3(59.95f, 0f, -42.42f);
     private bool hasEnteredArea = false;
+    private Vector3 lastPosition;
 
     private void Start()
 {
     // Set first target as gate midpoint
     targetPosition = (gateA + gateB) / 2f;
+    lastPosition = transform.position;
 }
 
     private void SetRandomTarget()
-{
-    float x = Random.Range(areaMin.x, areaMax.x);
-    float z = Random.Range(areaMin.z, areaMax.z);
-    targetPosition = new Vector3(x, transform.position.y, z);
-}
+    {
+        int maxAttempts = 30;
+        float checkRadius = 1.5f; // Adjust to your robot's size
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            float x = Random.Range(areaMin.x, areaMax.x);
+            float z = Random.Range(areaMin.z, areaMax.z);
+            Vector3 candidate = new Vector3(x, transform.position.y, z);
+
+            // Only accept if not inside an obstacle
+            if (!Physics.CheckSphere(candidate, checkRadius, obstacleLayer))
+            {
+                targetPosition = candidate;
+                return;
+            }
+        }
+        // If all attempts fail, just pick the last candidate (may be inside obstacle)
+        targetPosition = new Vector3(Random.Range(areaMin.x, areaMax.x), transform.position.y, Random.Range(areaMin.z, areaMax.z));
+    }
 
     private void FixedUpdate()
     {
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+
+        if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
+        {
+            hasEnteredArea = true;
+            Debug.Log("Entered area: " + hasEnteredArea);
+            SetRandomTarget();
+        }
+
+        HandleMotor();
+        HandleSteering();
+        UpdateWheels();
+
+        lastPosition = transform.position;
+
+        }
+
+    private bool CrossedGate(Vector3 from, Vector3 to)
+    {
+        Vector3 gateDir = gateB - gateA;
+        Vector3 toA = from - gateA;
+        Vector3 toB = to - gateA;
+        float sideFrom = Vector3.Cross(gateDir, toA).y;
+        float sideTo = Vector3.Cross(gateDir, toB).y;
+        return sideFrom * sideTo < 0f; // Crossed if sign changed
     }
 
     private void HandleMotor()
@@ -74,6 +115,7 @@ public class SimpleCarController : MonoBehaviour
         if (!hasEnteredArea)
         {
             hasEnteredArea = true;
+            Debug.Log("Entered area: " + hasEnteredArea);
             SetRandomTarget();
         }
         else
