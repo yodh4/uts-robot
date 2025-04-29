@@ -32,11 +32,12 @@ public class RobotController : MonoBehaviour
             for (int y = 0; y < gridSize; y++)
                 occupancyGrid[x, y] = -1; // Unknown
         lastPosition = transform.position;
+        gridOrigin = new Vector2(30f, -51.48f);
     }
 
     void Update()
     {
-        gridOrigin = new Vector2(transform.position.x - gridSize * cellSize / 2f, transform.position.z - gridSize * cellSize / 2f);
+        // gridOrigin = new Vector2(transform.position.x - gridSize * cellSize / 2f, transform.position.z - gridSize * cellSize / 2f);
         UpdateOdometry();
         SimulateLidar();
     }

@@ -2580,7 +2580,7 @@ Transform:
   m_GameObject: {fileID: 193560581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.4, y: 2.5580015, z: -32.2}
+  m_LocalPosition: {x: 91.7, y: 2.5580015, z: -51.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6049,7 +6049,7 @@ Transform:
   m_GameObject: {fileID: 466457464}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1170263, y: 0.6957053, z: -0.11645855, w: 0.6990969}
-  m_LocalPosition: {x: 39.910034, y: 3.1460001, z: -29.633131}
+  m_LocalPosition: {x: 41.82003, y: 3.1460001, z: -29.62313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14681,7 +14681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 42.61
+      value: 44.52
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14689,7 +14689,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.62
+      value: -29.61
       objectReference: {fileID: 0}
     - target: {fileID: 1283037225, guid: 78f66e17931a4e5449da398ea3d1f94c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14883,18 +14883,18 @@ MonoBehaviour:
   frontRightTransform: {fileID: 750033740}
   rearLeftTransform: {fileID: 750033739}
   rearRightTransform: {fileID: 750033738}
-  motorForce: 50
+  motorForce: 40
   brakeForce: 2000
   maxSteerAngle: 30
   targetReachThreshold: 1.5
   lookAheadDistance: 4
   steeringSmoothness: 5
-  lidarRange: 5
+  lidarRange: 4
   lidarRays: 180
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1
-  avoidanceStrength: 0.8
+    m_Bits: 4294967295
+  avoidanceStrength: 0.4
   areaMin: {x: 60.15, y: 0, z: -51.48}
   areaMax: {x: 96.66, y: 0, z: -6.06}
   bombDetectionRange: 20
@@ -24314,7 +24314,7 @@ Transform:
   m_GameObject: {fileID: 1708560253}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1170263, y: 0.6957053, z: -0.116458565, w: 0.69909686}
-  m_LocalPosition: {x: 39.910034, y: 3.1460001, z: -29.633131}
+  m_LocalPosition: {x: 41.82003, y: 3.1460001, z: -29.62313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

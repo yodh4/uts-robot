@@ -18,7 +18,6 @@ public class SimpleCarController : MonoBehaviour
 
     private float currentSteerAngle;
     private float currentBrakeForce;
-    private bool isBraking;
 
     private Vector3 targetPosition; // Target position for the car to move towards
     public float targetReachThreshold = 1f; // Berapa dekat ke target dianggap sampai
@@ -46,7 +45,7 @@ public class SimpleCarController : MonoBehaviour
     private bool hasEnteredArea = false;
     private Vector3 lastPosition;
 
-    public float bombDetectionRange = 50f; // or any value longer than lidarRange
+    public float bombDetectionRange = 30f; // or any value longer than lidarRange
     public int bombDetectionRays = 720;     // number of rays for bomb detection
 
     private void Start()
