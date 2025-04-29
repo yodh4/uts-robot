@@ -84,12 +84,20 @@ public class SimpleCarController : MonoBehaviour
                         if (cellCenter.x >= areaMin.x && cellCenter.x <= areaMax.x &&
                             cellCenter.z >= areaMin.z && cellCenter.z <= areaMax.z)
                         {
-                            float dist = Vector3.Distance(transform.position, cellCenter);
-                            if (dist < minDist)
+                            // --- Add this line-of-sight check ---
+                            Vector3 from = transform.position + Vector3.up * 0.5f;
+                            Vector3 to = cellCenter + Vector3.up * 0.5f;
+                            Vector3 dir = (to - from).normalized;
+                            float dist = Vector3.Distance(from, to);
+                            if (!Physics.Raycast(from, dir, dist, obstacleLayer))
                             {
-                                minDist = dist;
-                                bestTarget = cellCenter;
-                                found = true;
+                                float distToRobot = Vector3.Distance(transform.position, cellCenter);
+                                if (distToRobot < minDist)
+                                {
+                                    minDist = distToRobot;
+                                    bestTarget = cellCenter;
+                                    found = true;
+                                }
                             }
                         }
                     }
@@ -271,13 +279,13 @@ public class SimpleCarController : MonoBehaviour
                 if (((1 << hit.collider.gameObject.layer) & obstacleLayer) != 0)
                 {
                     // Draw red ray to obstacle
-                    Debug.DrawRay(ray.origin, dir * hit.distance, Color.red);
+                    // Debug.DrawRay(ray.origin, dir * hit.distance, Color.red);
                     avoidance -= dir / (hit.distance + 0.1f);
                 }
                 else
                 {
                     // Draw cyan ray to non-obstacle hit
-                    Debug.DrawRay(ray.origin, dir * hit.distance, Color.cyan);
+                    // Debug.DrawRay(ray.origin, dir * hit.distance, Color.cyan);
                 }
             }
             else

@@ -58,12 +58,12 @@ public class RobotController : MonoBehaviour
                 Ray ray = new Ray(lidarOrigin, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, lidarRange, obstacleMask))
                 {
-                    // Debug.DrawLine(lidarOrigin, hit.point, Color.red);
+                    Debug.DrawLine(lidarOrigin, hit.point, Color.red);
                     UpdateGridWithRay(lidarOrigin, hit.point, true);
                 }
                 else
                 {
-                    // Debug.DrawRay(lidarOrigin, dir * lidarRange, Color.green);
+                    Debug.DrawRay(lidarOrigin, dir * lidarRange, Color.green);
                     UpdateGridWithRay(lidarOrigin, lidarOrigin + dir * lidarRange, false);
                 }
             }
