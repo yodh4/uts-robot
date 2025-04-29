@@ -57,23 +57,65 @@ public class SimpleCarController : MonoBehaviour
 
     private void SetRandomTarget()
     {
-        int maxAttempts = 30;
-        float checkRadius = 1.5f; // Adjust to your robot's size
+        RobotController robotController = GetComponent<RobotController>();
+        if (robotController != null)
+        {
+            int[,] grid = robotController.GetOccupancyGrid();
+            Vector2 gridOrigin = robotController.GetGridOrigin();
+            float cellSize = robotController.cellSize;
+            int gridSize = robotController.gridSize;
 
+            float minDist = Mathf.Infinity;
+            Vector3 bestTarget = targetPosition;
+            bool found = false;
+
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (grid[x, y] == -1)
+                    {
+                        Vector3 cellCenter = new Vector3(
+                            gridOrigin.x + (x + 0.5f) * cellSize,
+                            transform.position.y,
+                            gridOrigin.y + (y + 0.5f) * cellSize
+                        );
+                        // Check if cellCenter is inside the zone
+                        if (cellCenter.x >= areaMin.x && cellCenter.x <= areaMax.x &&
+                            cellCenter.z >= areaMin.z && cellCenter.z <= areaMax.z)
+                        {
+                            float dist = Vector3.Distance(transform.position, cellCenter);
+                            if (dist < minDist)
+                            {
+                                minDist = dist;
+                                bestTarget = cellCenter;
+                                found = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (found)
+            {
+                targetPosition = bestTarget;
+                return;
+            }
+        }
+
+        // Fallback: original random point if no unexplored cell found or no RobotController
+        int maxAttempts = 30;
+        float checkRadius = 1.5f;
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
             float x = Random.Range(areaMin.x, areaMax.x);
             float z = Random.Range(areaMin.z, areaMax.z);
             Vector3 candidate = new Vector3(x, transform.position.y, z);
-
-            // Only accept if not inside an obstacle
             if (!Physics.CheckSphere(candidate, checkRadius, obstacleLayer))
             {
                 targetPosition = candidate;
                 return;
             }
         }
-        // If all attempts fail, just pick the last candidate (may be inside obstacle)
         targetPosition = new Vector3(Random.Range(areaMin.x, areaMax.x), transform.position.y, Random.Range(areaMin.z, areaMax.z));
     }
 
@@ -81,25 +123,86 @@ public class SimpleCarController : MonoBehaviour
 {
     BombDetectionScan(); // Scan for bombs with longer range
 
-    HandleMotor();
-    HandleSteering();
-    UpdateWheels();
-
-    if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
+    if (!hasEnteredArea)
     {
-        hasEnteredArea = true;
-        Debug.Log("Entered area: " + hasEnteredArea);
-        SetRandomTarget();
+        // Only check for gate crossing
+        if (CrossedGate(lastPosition, transform.position))
+        {
+            hasEnteredArea = true;
+            Debug.Log("Entered area: " + hasEnteredArea);
+            SetRandomTarget(); // Start grid-based exploration
+        }
     }
 
-    if (hasEnteredArea)
+    else
     {
+        // Grid-based exploration logic
+        RobotController robotController = GetComponent<RobotController>();
+        if (robotController != null)
+        {
+            int[,] grid = robotController.GetOccupancyGrid();
+            Vector2 gridOrigin = robotController.GetGridOrigin();
+            float cellSize = robotController.cellSize;
+
+            int tx = Mathf.FloorToInt((targetPosition.x - gridOrigin.x) / cellSize);
+            int ty = Mathf.FloorToInt((targetPosition.z - gridOrigin.y) / cellSize);
+
+            if (tx >= 0 && tx < robotController.gridSize && ty >= 0 && ty < robotController.gridSize)
+            {
+                if (grid[tx, ty] != -1)
+                {
+                    SetRandomTarget();
+                }
+            }
+        }
+
         if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
         {
             SetRandomTarget();
         }
         // If a bomb is detected, targetPosition will be set by BombDetectionScan()
     }
+
+    // RobotController robotController = GetComponent<RobotController>();
+    // if (robotController != null)
+    // {
+    //     int[,] grid = robotController.GetOccupancyGrid();
+    //     Vector2 gridOrigin = robotController.GetGridOrigin();
+    //     float cellSize = robotController.cellSize;
+
+    //     // Convert targetPosition to grid indices
+    //     int tx = Mathf.FloorToInt((targetPosition.x - gridOrigin.x) / cellSize);
+    //     int ty = Mathf.FloorToInt((targetPosition.z - gridOrigin.y) / cellSize);
+
+    //     // If the target cell is not unexplored, pick a new one
+    //     if (tx >= 0 && tx < robotController.gridSize && ty >= 0 && ty < robotController.gridSize)
+    //     {
+    //         if (grid[tx, ty] != -1)
+    //         {
+    //             SetRandomTarget();
+    //         }
+    //     }
+    // }
+
+    HandleMotor();
+    HandleSteering();
+    UpdateWheels();
+
+    // if (!hasEnteredArea && CrossedGate(lastPosition, transform.position))
+    // {
+    //     hasEnteredArea = true;
+    //     Debug.Log("Entered area: " + hasEnteredArea);
+    //     SetRandomTarget();
+    // }
+
+    // if (hasEnteredArea)
+    // {
+    //     if (Vector3.Distance(targetPosition, transform.position) < targetReachThreshold)
+    //     {
+    //         SetRandomTarget();
+    //     }
+    //     // If a bomb is detected, targetPosition will be set by BombDetectionScan()
+    // }
 
     lastPosition = transform.position;
 }
@@ -211,7 +314,13 @@ public class SimpleCarController : MonoBehaviour
         }
     }
 }
-
+    private void OnDrawGizmos()
+    {
+        // Draw the current target position as a red sphere
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(targetPosition, 0.5f);
+        Gizmos.DrawWireSphere(targetPosition, 1.1f);
+    }
 
     private void ApplyBraking()
     {

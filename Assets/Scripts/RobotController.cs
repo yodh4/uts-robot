@@ -116,9 +116,9 @@ public class RobotController : MonoBehaviour
             {
                 Vector3 cellCenter = new Vector3(gridOrigin.x + (x + 0.5f) * cellSize, 0.05f, gridOrigin.y + (y + 0.5f) * cellSize);
                 if (occupancyGrid[x, y] == -1)
-                    Gizmos.color = Color.black * 0.5f; // Unknown
+                    Gizmos.color = new Color(0.2f, 0.2f, 0.2f, 1f); // Unknown
                 else if (occupancyGrid[x, y] == 0)
-                    Gizmos.color = Color.white;
+                    Gizmos.color = Color.green;
                 else if (occupancyGrid[x, y] == 1)
                     Gizmos.color = Color.red;
                 Gizmos.DrawCube(cellCenter, new Vector3(cellSize, 0.01f, cellSize));
@@ -143,4 +143,7 @@ public class RobotController : MonoBehaviour
     // Get odometry data
     public float GetTotalDistanceTravelled() => totalDistanceTravelled;
     public float GetHeading() => heading;
+
+    public int[,] GetOccupancyGrid() => occupancyGrid;
+    public Vector2 GetGridOrigin() => gridOrigin;
 }
